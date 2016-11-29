@@ -4,18 +4,20 @@
 // By: Luis Castro
 //==================================================================================================
 
-#include <iostream>
-#include <fstream>
-#include <string>
-#include <vector>
-#include <boost/graph/adjacency_matrix.hpp>
+/*#include <boost/graph/adjacency_matrix.hpp>
 #include <boost/graph/depth_first_search.hpp>
 #include <boost/graph/directed_graph.hpp>
 #include <boost/graph/graph_traits.hpp>
 #include <boost/graph/graph_utility.hpp>
+using namespace boost;*/
+
+#include <iostream>
+#include <fstream>
+#include <ostream>
+#include <string>
+#include <vector>
 #define DIRECTION 6
 using namespace std;
-using namespace boost;
 
 struct Vertex {
 	int x;
@@ -92,15 +94,9 @@ int main(int argc, char* argv[])
 		}
 	}
 
-	for (int i = 0; i < sizeX; i++) 
+	while (!EOF)
 	{
-		for (int j = 0; j < sizeY; j++) 
-		{
-			for (int k = 0; k < sizeZ; k++) 
-			{
-
-			}
-		}
+		inputFile >> directions;
 	}
 
 	inputFile.close();
