@@ -9,7 +9,7 @@
 #include <ostream>
 #include <string>
 #include <vector>
-#define DIRECTION 6
+#include <stack>
 using namespace std;
 
 // Enumerate the directions/moves
@@ -25,11 +25,60 @@ struct Vertex {
 	bool visited;
 	string data;
 	vector<Vertex> adjList;
+	vector<Vertex> charList; 
 };
 
 struct Edge {
+	Vertex *head;
+	Vertex *tail;
 	int weight;
 };
+
+void DFS(int z, int x, int y, stack<Vertex> moveStack, stack<int> directionStack,
+			vector < vector < vector<Vertex> > > maze)
+{
+	int tempZ = z;
+	int tempX = x;
+	int tempY = y;
+	//cout << maze[z][x][y].z << " ";
+	//cout << maze[z][x][y].x << " ";
+	//cout << maze[z][x][y].y << endl;
+
+	// Mark the passed vertex into DFS function as visited and push onto stack
+	maze[z][x][y].visited = true;
+	moveStack.push(maze[z][x][y]);
+	
+	if (maze[z][x][y].start == true)
+	{
+		while(!moveStack.empty())
+		{
+			cout << "("  << moveStack.top().z;
+			cout << ", " << moveStack.top().x;
+			cout << ", " << moveStack.top().y;
+			cout << ")"  << endl;
+			moveStack.pop();
+		}
+	}
+
+	// Let's get the appropriate size for the loop
+	int loopSize;
+	loopSize = maze[z][x][y].adjList.size();
+
+	// Traverse the adjacencies of the passed in vertex
+	for (int i = 0; i < loopSize; i++)
+	{
+		tempZ = maze[z][x][y].adjList[i].z;
+		tempX = maze[z][x][y].adjList[i].x;
+		tempY = maze[z][x][y].adjList[i].y;
+		//cout << tempZ << " " << tempX << " " << tempY << endl;
+
+		// If the adjacent vertex is unvisited, recurse DFS()
+		if (maze[tempZ][tempX][tempY].visited == false)
+		{
+			DFS(tempZ, tempX, tempY, moveStack, directionStack, maze);
+		}
+	}
+}
 
 int main()
 {
@@ -41,7 +90,8 @@ int main()
 	int endX, endY, endZ;
 	int volume;
 	int cellCount = 0;
-	vector<Vertex> adjList;
+	stack<Vertex> moveStack;
+	stack<int> directionStack;
 
 	// Open input.txt
 	string fileLine;
@@ -83,7 +133,7 @@ int main()
 		{
 			for (int j = 0; j < sizeY; j++)
 			{
-				// Assign numbers
+				// Assign coordinates
 				maze[k][i][j].z = k;
 				maze[k][i][j].x = i;
 				maze[k][i][j].y = j;
@@ -94,9 +144,20 @@ int main()
 				// Give each cell a cell number
 				maze[k][i][j].cellNumber = cellCount;
 				cellCount++;
+
+				// Mark each node not visited
+				maze[k][i][j].visited = false;
+
+				// Mark each node start/end as false
+				maze[k][i][j].start = false;
+				maze[k][i][j].end = false;
 			}
 		}
 	}
+
+	// Mark the beginning and end cells of the maze
+	maze[startZ][startX][startY].start = true;
+	maze[endZ][endX][endY].end = true;
 
 	for (int k = 0; k < sizeZ; k++)
 	{
@@ -112,6 +173,7 @@ int main()
 				{
 					cout << maze[k][i][j].data[l];
 				}
+				cout << "\tCell Number: " << maze[k][i][j].cellNumber;
 				cout << endl;
 			}
 		}
@@ -138,9 +200,6 @@ int main()
 							case 0:
 								moveDirection = N;
 								maze[k][i][j].adjList.push_back(maze[k][i-1][j]);
-								//maze[k][i][j].edge.direction = moveDirection
-								//maze[k][i][j].edge.destination = maze[k][i-1][j]
-								//maze[k][i][j].vertexpointer = &maze[k][i-1][j]
 								break;
 							case 1:
 								moveDirection = E;
@@ -172,10 +231,10 @@ int main()
 		}
 	}
 
+	cout << "\nStart" << endl;
+	DFS(endZ, endX, endY, moveStack, directionStack, maze);
+	cout << "End" << endl;
+
 	inputFile.close();
 	return 0;
 }
-
-// Start with end -> push onto stack
-// Build DFS keep pushing onto stack and then keep doing it until you hit
-// the start and then pop() 
