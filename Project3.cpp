@@ -4,13 +4,6 @@
 // By: Luis Castro
 //==================================================================================================
 
-/*#include <boost/graph/adjacency_matrix.hpp>
-#include <boost/graph/depth_first_search.hpp>
-#include <boost/graph/directed_graph.hpp>
-#include <boost/graph/graph_traits.hpp>
-#include <boost/graph/graph_utility.hpp>
-using namespace boost;*/
-
 #include <iostream>
 #include <fstream>
 #include <ostream>
@@ -79,22 +72,11 @@ int main()
 	volume = sizeX * sizeY * sizeZ;
 
 	// Declare a 3D vector
-	//vector < vector < vector < Vertex > > > maze;
-	vector <vector <vector <Vertex> > > maze(sizeZ, vector < vector <Vertex> > (sizeX, vector <Vertex> (sizeY)));
-
-	// Resize the vector into the size described
-/*	maze.resize(sizeZ);
-	for (int k = 0; k < sizeZ; k++)
-	{
-		maze[k].resize(sizeX);
-		for (int i = 0; i < sizeX; i++)
-		{
-			maze[k][i].resize(sizeY);
-		}
-	}*/
+	vector <vector <vector <Vertex> > > maze(sizeZ, vector < vector <Vertex> > 
+		(sizeX, vector <Vertex> (sizeY)));
 
 	// Populate every cell in the maze with a number [0...n] where n is the
-	// number of cells in the 
+	// number of cells in the maze
 	for (int k = 0; k < sizeZ; k++)
 	{
 		for (int i = 0; i < sizeX; i++)
@@ -190,20 +172,6 @@ int main()
 		}
 	}
 
-
-/*	int vectorSize = 0;
-	vectorSize = maze[0][0][0].adjList.size();
-	cout << "Vector Size: " << vectorSize << endl;
-	cout << "maze[2][2][2].cellNumber = " << maze[2][2][2].cellNumber << endl;
-	
-	for (int i = 0; i < vectorSize; i++)
-	{
-		cout << "(" << maze[0][0][0].adjList[i].z << ", ";
-		cout << maze[0][0][0].adjList[i].x << ", ";
-		cout << maze[0][0][0].adjList[i].y << ")";
-		cout << endl;
-	}
-*/
 	inputFile.close();
 	return 0;
 }
